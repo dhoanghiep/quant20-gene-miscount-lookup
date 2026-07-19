@@ -59,11 +59,6 @@
     max-width:960px; margin:0 auto; padding:48px 24px 32px;
     border-bottom:1px solid var(--panel-line);
   }
-  .eyebrow{
-    font-family:var(--mono); font-size:12.5px; letter-spacing:.11em; text-transform:uppercase;
-    color:var(--plus-ink); font-weight:600; display:flex; align-items:center; gap:10px;
-  }
-  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--plus); flex:none; }
   h1{
     font-family:var(--serif); font-weight:700; font-size:clamp(28px,4vw,40px);
     line-height:1.15; margin:14px 0 12px; max-width:22ch; text-wrap:balance;
@@ -230,9 +225,8 @@
 <body>
 
 <header class="masthead">
-  <div class="eyebrow"><span class="dot"></span>quant_20 — gene lookup</div>
   <h1>Is my gene miscounted?</h1>
-  <p class="dek">Search any of the 19,408 canonical genes to see how StringTie, bambu, oarfish, and lr-kallisto quantified it — against the canonical-only reference (Exp&nbsp;1 / 1A) and against the canonical+non-canonical reference (Exp&nbsp;2 / 2A).</p>
+  <p class="dek">Search any of the 19,408 canonical genes to see how StringTie, bambu, oarfish, and lr-kallisto quantified it — against the <strong>Base Reference</strong> (canonical-only) and against the <strong>Redundant Reference</strong> (canonical + non-canonical isoforms).</p>
   <div class="meta-row">
     <span>19,408 canonical genes</span>
     <span>4 tools</span>
@@ -244,7 +238,7 @@
 
 <div class="bytool-wrap">
   <div class="bytool-title">Browse all miscounted genes by tool</div>
-  <div class="bytool-sub">Click a tool to open the full table of genes it miscounted, in either experiment.</div>
+  <div class="bytool-sub">Click a tool to open the full table of genes it miscounted, against either reference.</div>
   <div class="tool-buttons" id="toolButtons"></div>
 </div>
 
@@ -291,7 +285,7 @@
 </div>
 
 <footer>
-  Data: <code>1B_2B_analysis/correctness_with_neighbors_and_paralogs.csv</code>. See <code>ANALYSIS_GUIDE.md</code> for full methodology.
+  Questions? <a href="mailto:dhoanghiep1998@gmail.com">dhoanghiep1998@gmail.com</a>
 </footer>
 
 <script>
@@ -336,7 +330,7 @@ function renderGene(g){
       <div class="tool-row">
         <div class="tname">${t.label}</div>
         <div class="flow">${pill(s0,c0)} <span class="arrow">→</span> ${pill(s20,c20)}</div>
-        ${corrupted ? '<div class="corrupt-flag">⚠ corrupted in Exp 2 — a non-canonical isoform stole reads</div>' : ''}
+        ${corrupted ? '<div class="corrupt-flag">⚠ corrupted in the Redundant Reference — a non-canonical isoform stole reads</div>' : ''}
       </div>`;
   }
 
@@ -386,7 +380,7 @@ function renderStatStrip(){
     const s = SUMMARY[key];
     const pct0 = (100*s.n0_correct/s.total).toFixed(1);
     const pct20 = (100*s.n20_correct/s.total).toFixed(1);
-    return `<div class="stat"><div class="n">${pct0}% → ${pct20}%</div><div class="l">${label} correct (1A → 2A)</div></div>`;
+    return `<div class="stat"><div class="n">${pct0}% → ${pct20}%</div><div class="l">${label} correct (Base → Redundant)</div></div>`;
   }).join('');
 }
 
@@ -426,7 +420,7 @@ function renderToolButtons(){
     return `
       <div class="tool-btn" data-idx="${idx}">
         <div class="tb-name">${t.label}</div>
-        <div class="tb-counts"><b>${c.n0}</b> miscounted in 1A · <b>${c.n20}</b> in 2A</div>
+        <div class="tb-counts"><b>${c.n0}</b> miscounted in Base Reference · <b>${c.n20}</b> in Redundant Reference</div>
       </div>`;
   }).join('');
   wrap.querySelectorAll('.tool-btn').forEach(btn => {
@@ -438,8 +432,8 @@ const MODAL_COLS = [
   { key:'name', label:'Gene' },
   { key:'geneId', label:'Gene ID' },
   { key:'chrom', label:'Chrom' },
-  { key:'n0', label:'1A (n=0)' },
-  { key:'n20', label:'2A (n=20)' },
+  { key:'n0', label:'Base (n=0)' },
+  { key:'n20', label:'Redundant (n=20)' },
   { key:'corrupted', label:'Corrupted' },
   { key:'cause', label:'Cause' },
 ];
@@ -536,7 +530,7 @@ function openToolModal(idx){
   modalState.sortDir = 1;
   modalState.filter = '';
   document.getElementById('modalTitle').textContent = `${t.label} — miscounted genes`;
-  document.getElementById('modalSub').textContent = `${modalState.rows.length} of 19,408 canonical genes miscounted in 1A and/or 2A`;
+  document.getElementById('modalSub').textContent = `${modalState.rows.length} of 19,408 canonical genes miscounted in the Base and/or Redundant Reference`;
   document.getElementById('modalFilterInput').value = '';
   renderModalTable();
   document.getElementById('modalOverlay').classList.add('open');
