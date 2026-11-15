@@ -1,20 +1,20 @@
-# Check your gene — missing isoforms
+# Check your gene
 
 The QR-code target for Result 2 of the ABACBS 2026 poster *A simulation framework to benchmark long-read RNA
 quantification tools*. Served at https://longread.hiepd.com.
 
-Each of the 19,408 protein-coding genes was simulated with 100 perfect reads from its canonical isoform and 100 from
-each of its other isoforms (up to 20). The reference held only the canonical. The page shows where 9 tools
-(oarfish, lr-kallisto, TranSigner, FLAIR, NanoCount, IsoQuant, bambu, StringTie2, ESPRESSO) put the reads of the
-missing isoforms.
+Search any of 19,408 protein-coding genes to see how 9 tools (oarfish, lr-kallisto, TranSigner, FLAIR, NanoCount,
+IsoQuant, bambu, StringTie2, ESPRESSO) count its canonical isoform in the four reads × reference scenarios:
 
-## Features
+| Scenario | Reads | Reference |
+|---|---|---|
+| canonical only | canonical | canonical |
+| extra isoforms | canonical | complex (canonical + up to 20 isoforms) |
+| isoforms missing | complex | canonical |
+| isoforms matched | complex | complex |
 
-- **Gene search**: per tool, the canonical count with isoforms missing and the share of the missing isoforms' reads
-  absorbed into it. Also the gene's missing isoforms by structure type, and a toggle to compare with the full
-  reference or with canonical reads only. Deep links: `/#GENE`.
-- **Absorption table**: % of a missing isoform's reads counted on the canonical, per structure type × tool (poster Result 2).
-- **Browse by isoform type**: genes whose missing isoforms are all of one type.
+Reads are perfect (100 per expressed transcript), so the true canonical count is always 100; correct = 90–110.
+Each gene card also lists the gene's other isoforms by structure type. Deep links: `/#GENE`.
 
 Phone-first, light theme. `index.html` is self-contained (data inline), with no build step or server.
 
