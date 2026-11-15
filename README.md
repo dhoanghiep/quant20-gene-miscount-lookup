@@ -16,6 +16,8 @@ IsoQuant, bambu, StringTie2, ESPRESSO) count its canonical isoform in the four r
 Reads are perfect (100 per expressed transcript), so the true canonical count is always 100; correct = 90–110.
 Each gene card also lists the gene's other isoforms by structure type. Deep links: `/#GENE`.
 
+The poster itself is at `/poster/` (preview image + A0 PDF), linked from the search page header.
+
 Phone-first, light theme. `index.html` is self-contained (data inline), with no build step or server.
 
 ## Data source
